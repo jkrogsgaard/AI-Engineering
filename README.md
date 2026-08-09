@@ -1,8 +1,24 @@
 # AI Engineering
 
-Canonical, versioned baseline for setting up repositories for effective AI-assisted engineering.
+A canonical, versioned baseline for setting up repositories for effective AI-assisted engineering.
 
 The goal is not to copy one fixed repository structure everywhere. The goal is to give each repository the smallest amount of durable context, documentation, tooling, and orchestration that reliably improves engineering work.
+
+## Quick start
+
+Give your coding agent this prompt:
+
+```text
+Set up or upgrade this repository using the latest AI Engineering Bootstrap:
+
+https://github.com/jkrogsgaard/AI-Engineering/blob/main/BOOTSTRAP.md
+
+Read the bootstrap first, then inspect this repository and apply it as an audit rather than a template. Preserve project-specific knowledge and any existing solution that is already better than the baseline.
+
+Implement the appropriate changes, verify the resulting setup, perform the required ablation review, and record the baseline provenance when the review succeeds.
+```
+
+Use the same prompt for new and existing repositories. The bootstrap adapts the setup to the repository instead of requiring one fixed structure.
 
 ## Current baseline
 
@@ -56,3 +72,7 @@ A new baseline version should update, at minimum:
 4. the relevant migration guide, for example `migrations/v5-to-v6.md`
 
 Do not advance the version unless the baseline and migration guidance describe the same release.
+
+## License
+
+MIT. See `LICENSE`.
