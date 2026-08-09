@@ -1,5 +1,7 @@
 # AI Engineering
 
+> **For AI coding agents:** If you were pointed to this repository to set up or upgrade another repository, read `BOOTSTRAP.md` first and apply it to your current working repository. Treat it as an audit, not a template. Do not modify this baseline repository unless explicitly asked to do so.
+
 A canonical, versioned baseline for setting up repositories for effective AI-assisted engineering.
 
 The goal is not to copy one fixed repository structure everywhere. The goal is to give each repository the smallest amount of durable context, documentation, tooling, and orchestration that reliably improves engineering work.
@@ -11,12 +13,12 @@ Give your coding agent this prompt:
 ```text
 Set up or upgrade this repository using the latest AI Engineering Bootstrap:
 
-https://github.com/jkrogsgaard/AI-Engineering/blob/main/BOOTSTRAP.md
-
-Read the bootstrap first, then inspect this repository and apply it as an audit rather than a template. Preserve project-specific knowledge and any existing solution that is already better than the baseline.
-
-Implement the appropriate changes, verify the resulting setup, perform the required ablation review, and record the baseline provenance when the review succeeds.
+https://github.com/jkrogsgaard/AI-Engineering
 ```
+
+That should be sufficient when the agent can read the repository. The README directs the agent to the canonical `BOOTSTRAP.md`, which then tells it how to inspect and improve the current working repository.
+
+If the agent cannot access external GitHub repositories or the internet, provide `BOOTSTRAP.md` directly instead.
 
 Use the same prompt for new and existing repositories. The bootstrap adapts the setup to the repository instead of requiring one fixed structure.
 
@@ -72,6 +74,8 @@ A new baseline version should update, at minimum:
 4. the relevant migration guide, for example `migrations/v5-to-v6.md`
 
 Do not advance the version unless the baseline and migration guidance describe the same release.
+
+Once a baseline has been adopted by a participating project, treat that baseline version as immutable. Further semantic changes belong in the next baseline version.
 
 ## License
 
