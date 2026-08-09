@@ -2,6 +2,12 @@
 
 **Baseline version: v5**
 
+## Target repository
+
+Apply these instructions to the repository you are currently working in.
+
+This AI-Engineering repository is the baseline source, not the target repository, unless the user explicitly says otherwise.
+
 ## Set up this repository for effective AI-assisted engineering
 
 I want this repository to be easy, safe, and efficient for modern AI coding agents to work in over time.
