@@ -2,6 +2,33 @@
 
 This changelog records material changes to the AI Engineering Bootstrap baseline.
 
+## v6 - 2026-08-09
+
+### Added
+
+- Exact upstream `source_commit` provenance alongside the human-readable baseline version.
+- Pre-creation ablation: proposed persistent files, instructions, skills, agents, adapters, hooks, and orchestration must justify their cost before they are created.
+- Explicit skipped-version upgrade behavior: read all adjacent migrations from the recorded version through the current version, compose the net target state, and avoid replaying obsolete intermediate states.
+- Migration guidance structured for composition across future baseline versions.
+
+### Changed
+
+- New repositories are no longer shown `AGENTS.md` plus `AI_ENGINEERING_PLAYBOOK.md` as the default minimal pair; a repository may need only a focused `AGENTS.md`.
+- A separate playbook now requires demonstrated recurring value beyond native agent capability and project-specific instructions.
+- Durable project knowledge should normally live in ordinary domain-appropriate documentation rather than dedicated `AI_CONTEXT`-style files that duplicate existing sources.
+- Baseline provenance verification now checks both the reviewed version and the exact upstream source commit.
+- Final ablation remains required; pre-creation ablation complements rather than replaces it.
+
+### Upgrade model
+
+A repository upgrading across several baseline versions should not implement each historical baseline in sequence.
+
+For example, a v5 repository upgrading to v8 should read `v5-to-v6`, `v6-to-v7`, and `v7-to-v8`, reason about their combined Added, Changed, Removed, Reassess, Preserve, and Verification guidance, then perform one focused audit against the current target state.
+
+### Philosophy
+
+v6 is a learning release informed by real repository audits. The central lesson is that good bootstrap behavior is measured as much by what an agent deliberately does **not** create as by what it adds.
+
 ## v5 - 2026-08-09
 
 ### Added
