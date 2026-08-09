@@ -1,5 +1,6 @@
 baseline:
   id: ai-engineering-bootstrap
   repository: jkrogsgaard/AI-Engineering
-  version: 5
-  last_reviewed: 2026-08-09
+  version: 6
+  source_commit: "<exact-upstream-commit>"
+  last_reviewed: "YYYY-MM-DD"
