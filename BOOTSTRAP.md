@@ -1,12 +1,16 @@
 # AI Engineering Bootstrap
 
-**Baseline version: v5**
+**Baseline version: v6**
 
 ## Target repository
 
 Apply these instructions to the repository you are currently working in.
 
 This AI-Engineering repository is the baseline source, not the target repository, unless the user explicitly says otherwise.
+
+If the target repository already records an older AI Engineering baseline, treat this as an upgrade audit.
+
+Before changing anything, read the adjacent migration guides from the recorded version through v6. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
 
 ## Set up this repository for effective AI-assisted engineering
 
@@ -47,7 +51,17 @@ Prefer deterministic enforcement over prose where practical.
 
 Every persistent instruction should earn its context cost.
 
+Every persistent file or compatibility layer should earn its maintenance cost.
+
 Every delegation, execution stage, and coordination boundary should earn its coordination cost.
+
+Ablate before creating as well as after creating.
+
+Before adding a persistent instruction, playbook, context document, skill, runbook, custom agent, adapter, hook, or orchestration mechanism, ask:
+
+> Would a capable modern coding agent materially perform worse in this repository without this?
+
+If the answer is no, do not create it.
 
 ---
 
@@ -89,6 +103,7 @@ Inspect enough of the repository to understand:
 - agent permissions and sandboxing
 - worktree, branch, sandbox, or other task-isolation mechanisms
 - existing orchestration or delegation rules
+- an existing AI Engineering provenance marker
 
 Search specifically for existing mechanisms such as:
 
@@ -113,6 +128,7 @@ Search specifically for existing mechanisms such as:
 - architecture docs
 - contribution guides
 - runbooks
+- `.ai-engineering.yml` or equivalent provenance
 
 Inspect package manifests, configuration files, scripts, CI definitions, and other authoritative sources to verify important commands instead of copying potentially stale documentation.
 
@@ -124,7 +140,7 @@ Do not reorganize the repository merely to match this proposal.
 
 # 3. Determine the repository's actual needs
 
-Before editing files, determine:
+Before editing files, determine what the repository actually needs.
 
 ## Repository type
 
@@ -175,6 +191,16 @@ Do not recreate capabilities in repository instructions that the active agent ha
 
 Do not add tool-specific files, custom agents, compatibility layers, or orchestration infrastructure unless they provide real value.
 
+## Identify gaps before proposing artifacts
+
+Describe the concrete gaps first.
+
+Only then decide whether a persistent artifact is the smallest useful intervention.
+
+For every proposed new file, instruction set, skill, runbook, agent definition, adapter, hook, or orchestration mechanism, apply the pre-creation ablation question from section 1.
+
+Do not infer that a conceptual component in this bootstrap must exist physically in the repository.
+
 ---
 
 # 4. Review existing AI instructions
@@ -192,13 +218,14 @@ Review them for:
 - generic advice modern agents no longer need
 - task-specific context stored permanently
 - procedures that belong in skills or runbooks
-- durable knowledge that belongs in `docs/`
+- durable knowledge that belongs in ordinary project documentation
 - rules that should be enforced mechanically instead
 - instructions that only apply to one subsystem and should be scoped more narrowly
 - orchestration rules that create unnecessary complexity
 - specialist agents whose responsibilities overlap
 - permanent custom agents that serve only one-off tasks
 - assumptions about capabilities the current agent harness already provides natively
+- AI-specific context files that duplicate code or canonical project documentation
 
 Do not delete useful instructions simply because they do not match this structure.
 
@@ -213,6 +240,8 @@ Prefer one canonical source of truth with thin compatibility layers over several
 Use the following as a default conceptual model.
 
 Change it when the repository or current tooling provides a simpler or better solution.
+
+None of these components is mandatory merely because it appears here.
 
 ---
 
@@ -369,8 +398,6 @@ If current recommended behavior has changed, use the current mechanism.
 
 Keep `CLAUDE.md` concise.
 
-Follow current official guidance for practical size and loading behavior.
-
 Remember that imported files also enter Claude Code's context, so optimize the total loaded instruction context rather than the `CLAUDE.md` line count alone.
 
 Do not create `CLAUDE.md` if the repository does not use Claude Code and it provides no clear value.
@@ -401,17 +428,28 @@ Avoid maintaining several full copies of the same instructions.
 
 ## 5.5 `AI_ENGINEERING_PLAYBOOK.md`
 
-Create or maintain a reusable engineering playbook for AI coding agents when the project benefits from one.
+Do **not** create a separate engineering playbook by default.
 
-This is deeper reference material.
+Create or maintain one only when the project demonstrates recurring need for reusable engineering methodology that materially improves agent performance beyond:
 
-It does not need to be loaded into the initial context of every task.
+- the agent's native engineering capability
+- project-specific instructions in `AGENTS.md`
+- existing project documentation
+- existing deterministic checks
+
+Before creating or retaining the playbook, ask:
+
+> Would a capable modern coding agent materially perform worse in this repository without this file?
+
+If no, do not create it or remove it.
+
+When justified, the playbook is deeper reference material and does not need to be loaded into the initial context of every task.
 
 `AGENTS.md` may point to it for substantial engineering work.
 
-The playbook should contain general engineering methodology rather than repository facts.
+The playbook should contain reusable engineering methodology rather than repository facts.
 
-Use these core principles as the default seed:
+A possible seed is:
 
 1. Understand before changing.
 2. Optimize for the requested outcome, not merely the literal wording, while keeping scope to the smallest change necessary to achieve that outcome.
@@ -430,23 +468,17 @@ Use these core principles as the default seed:
 15. Remove instructions that no longer improve agent behavior.
 16. Make every delegation, execution stage, and coordination boundary earn its coordination cost.
 
-Treat these principles as a default seed, not a mandatory minimum.
+Treat these principles as a possible seed, not a mandatory minimum and not a reason by itself to create the file.
 
 Do not expand them into a large handbook unless the repository has demonstrated recurring need for the expanded guidance.
 
 Remove, scope, or relocate principles that do not materially improve agent behavior.
 
-Add deeper sections only when they provide recurring value across the repository.
-
 Specialized procedures such as migrations, security reviews, browser verification, releases, incident response, or AI-specific testing usually belong in skills or runbooks rather than in the core playbook.
 
-If an `AI_ENGINEERING_PLAYBOOK.md` is supplied with this task, treat it as the proposed canonical starting point.
-
-Review it critically.
+If an `AI_ENGINEERING_PLAYBOOK.md` is already supplied, treat it as evidence to review critically, not as protected baseline content.
 
 Do not recreate or duplicate it from this prompt.
-
-Simplify, relocate, or remove parts that are outdated, redundant, too generic, tool-specific, or better enforced elsewhere.
 
 ---
 
@@ -472,6 +504,10 @@ Do not create documents merely because these categories exist.
 Only create documentation the project actually needs.
 
 Prefer focused, discoverable documents over one enormous project encyclopedia.
+
+Name durable project documentation for the domain or subject it explains, not merely for the fact that an AI agent may read it.
+
+Do not create `AI_CONTEXT.md`, `AI_AGENT_CONTEXT.md`, or similar parallel context documents when the useful information already belongs in or can be retrieved from canonical product, architecture, domain, operational, security, integration, or code sources.
 
 For larger documentation sets, consider a small index that helps agents identify the relevant document without loading everything.
 
@@ -521,6 +557,8 @@ Where several tools are supported, prefer:
 - thin tool-specific adapters where needed
 
 rather than several divergent copies.
+
+Apply pre-creation ablation before adding a skill or runbook merely because the procedure might someday be useful.
 
 ---
 
@@ -608,8 +646,8 @@ For every piece of information, ask:
 |---|---|
 | Does an agent need this during almost every meaningful task? | Root persistent instructions such as `AGENTS.md` |
 | Does it apply only to a package, service, path, or subsystem? | Scoped or nested tool-native instructions |
-| Is it a reusable multi-step procedure? | Skill or runbook |
-| Is it durable knowledge that should be retrieved when relevant? | `docs/` |
+| Is it a reusable multi-step procedure with demonstrated recurring value? | Skill or runbook |
+| Is it durable project knowledge that should be retrieved when relevant? | Ordinary domain-appropriate `docs/` |
 | Is it specific to the current task? | Task, issue, or prompt |
 | Can a capable agent reliably infer it from the repository? | Usually do not document it |
 | Can it be enforced mechanically? | Prefer code, tests, types, schemas, permissions, hooks, linting, CI, or other deterministic controls |
@@ -618,6 +656,8 @@ For every piece of information, ask:
 | Does the task contain several dependent stages or require durable progress tracking? | Task-scoped execution plan when useful |
 
 Use the narrowest useful scope.
+
+Before creating the chosen artifact, apply the pre-creation ablation test.
 
 ---
 
@@ -631,11 +671,10 @@ AGENTS.md
     ├── project facts
     ├── hard invariants
     ├── verified commands
-    └── pointers
+    └── pointers only where needed
          │
-         ├── AI_ENGINEERING_PLAYBOOK.md
-         ├── docs/
-         └── skills / runbooks
+         ├── ordinary project docs
+         └── skills / runbooks with demonstrated value
 
 CLAUDE.md or other tool-specific adapter
     │
@@ -650,6 +689,8 @@ Task / issue
     └── current changing context + task-scoped execution topology
 ```
 
+A separate engineering playbook may exist when it has earned its place. It is not part of the default skeleton.
+
 Avoid:
 
 ```text
@@ -657,14 +698,15 @@ AGENTS.md
 CLAUDE.md
 RULES.md
 PLAYBOOK.md
+AI_CONTEXT.md
 README.md
 
-→ several partially overlapping copies of the same instructions
+→ several partially overlapping copies of the same instructions or project knowledge
 ```
 
 Also avoid several specialist agents that contain mostly the same instructions with different names.
 
-When the same rule exists in several places, consolidate it unless tooling genuinely requires limited duplication.
+When the same rule or fact exists in several places, consolidate it unless tooling genuinely requires limited duplication.
 
 ---
 
@@ -695,6 +737,8 @@ Do not necessarily implement every possible control as part of this task.
 
 Identify the highest-value opportunities, especially hard boundaries currently carried only by prose.
 
+Mechanical enforcement must itself be understandable and reliable. A guardrail that fails legitimate work silently or opaquely is a defect to investigate, not evidence that the work is invalid.
+
 ---
 
 # 9. Existing repositories
@@ -716,13 +760,16 @@ Instead:
 9. identify rules better enforced mechanically
 10. identify unnecessary orchestration complexity
 11. identify recurring specialist roles worth preserving
-12. propose the smallest useful consolidation
-13. preserve important project-specific knowledge
-14. migrate incrementally
+12. identify persistent artifacts that would fail pre-creation ablation if proposed today
+13. propose the smallest useful consolidation
+14. preserve important project-specific knowledge
+15. migrate incrementally
 
 Maintain compatibility where doing so is inexpensive and useful.
 
 If the existing structure is already better than this proposal, keep it.
+
+Evidence-backed local practices may be more elaborate than the baseline default and should not be downgraded merely for consistency.
 
 ---
 
@@ -734,26 +781,57 @@ Start minimal.
 
 Do not create a documentation hierarchy before the project has meaningful information to place in it.
 
-A suitable initial setup may be only:
+A suitable initial AI setup may be only:
 
 ```text
 AGENTS.md
-AI_ENGINEERING_PLAYBOOK.md
 ```
 
-plus a thin tool-specific compatibility file if actually useful.
+and even that file should contain only high-value project-specific information a capable agent cannot reliably infer.
 
-Create `docs/`, scoped rules, skills, runbooks, custom agents, or orchestration infrastructure only when the project has information or recurring work worthy of them.
+Add a thin tool-specific compatibility file only if the project actually uses the tool and the adapter provides value.
+
+Do not create `AI_ENGINEERING_PLAYBOOK.md`, `docs/`, scoped rules, skills, runbooks, custom agents, or orchestration infrastructure until a concrete recurring need demonstrates that the artifact earns its maintenance, context, or coordination cost.
 
 Do not create empty process infrastructure.
+
+Do not create generic AI-context documentation merely to summarize an otherwise understandable repository.
 
 Do not create a permanent team of specialist agents before recurring needs demonstrate that those roles are valuable.
 
 ---
 
-# 11. Instruction and orchestration ablation
+# 11. Instruction, artifact, and orchestration ablation
 
-Treat all persistent instructions as removable until they prove their value.
+Ablation happens twice: **before creation** and **after the resulting setup exists**.
+
+## Pre-creation ablation
+
+Before creating any persistent AI-related artifact, ask:
+
+> Would a capable modern coding agent materially perform worse in this repository without this?
+
+Apply this to:
+
+- persistent instructions
+- compatibility files
+- engineering playbooks
+- AI-specific context documents
+- skills
+- runbooks
+- custom agents
+- scoped rules
+- hooks
+- execution-plan conventions
+- orchestration infrastructure
+
+If the answer is no, do not create it.
+
+If the value can be achieved more reliably through existing code, ordinary project documentation, tests, types, schemas, permissions, or CI, prefer that source.
+
+## Final ablation
+
+Treat all persistent instructions and AI infrastructure as removable until they prove their value.
 
 For every persistent instruction, ask:
 
@@ -778,48 +856,87 @@ When an agent repeatedly makes a preventable mistake:
 3. place it at the narrowest appropriate scope
 4. prefer deterministic enforcement where practical
 
-Do not allow instruction files or orchestration graphs to grow monotonically forever.
+Do not allow instruction files, context documents, playbooks, skills, or orchestration graphs to grow monotonically forever.
 
 ---
 
 # 12. Baseline provenance and future upgrades
 
-If this repository participates in a centrally versioned AI engineering baseline, record enough provenance to determine which baseline the repository was last reviewed against.
+If this repository participates in the centrally versioned AI Engineering baseline, record enough provenance to determine both the release identity and the exact upstream baseline state last reviewed.
 
 Prefer a small machine-readable marker rather than copying the entire bootstrap prompt into every repository.
 
-A conceptual example is:
+The recommended marker is:
 
 ```yaml
 baseline:
   id: ai-engineering-bootstrap
-  version: 5
-  last_reviewed: 2026-08-09
+  repository: jkrogsgaard/AI-Engineering
+  version: 6
+  source_commit: <exact-upstream-commit>
+  last_reviewed: YYYY-MM-DD
 ```
 
-Choose the actual filename, format, and location according to the repository and surrounding tooling.
+`version` is the human-readable baseline release.
+
+`source_commit` is the exact immutable commit in the upstream AI-Engineering repository that was actually reviewed.
+
+Do not substitute `main` or another moving branch name for `source_commit`.
+
+Do not guess a historical source commit when reliable evidence is unavailable.
 
 Do not create this marker if there is no centrally managed baseline or upgrade process.
+
+## Upgrade audit
 
 A baseline upgrade is an audit, not a blind synchronization operation.
 
 When a newer baseline becomes available:
 
 1. identify the repository's currently recorded baseline version
-2. inspect the changes between that baseline and the new version
-3. inspect the repository's current AI engineering setup
-4. determine which baseline changes are relevant
-5. preserve project-specific facts, constraints, conventions, and superior local solutions
-6. apply only changes that materially improve this repository
-7. verify the resulting setup
-8. perform instruction and orchestration ablation
-9. update the recorded baseline version only after the review succeeds
+2. identify the current upstream baseline version
+3. read the relevant adjacent migration guides from the recorded version through the current version
+4. compose their guidance into the net desired current target state
+5. inspect the repository's current AI engineering setup
+6. determine which net baseline changes are relevant
+7. preserve project-specific facts, constraints, conventions, evidence-backed practices, and superior local solutions
+8. apply only changes that materially improve this repository
+9. verify the resulting setup
+10. perform final instruction, artifact, and orchestration ablation
+11. verify the exact upstream source commit used for the successful audit
+12. update the recorded version, source commit, and review date only after the review succeeds
 
 Do not overwrite repository-specific instructions merely because the baseline changed.
 
 Do not downgrade a repository-specific solution that is already better than the new baseline.
 
-Prefer explicit baseline changelogs or migration notes so upgrade agents can reason about the delta instead of repeatedly re-evaluating every historical baseline version.
+## Skipped versions
+
+Migration guides are adjacent and composable.
+
+If a repository's recorded version is older than the immediately previous baseline, read every adjacent migration guide in order through the current version.
+
+For example, a repository moving from v5 directly to v8 should read:
+
+```text
+migrations/v5-to-v6.md
+migrations/v6-to-v7.md
+migrations/v7-to-v8.md
+```
+
+Reason about the combined Added, Changed, Removed, Reassess, Preserve, and Verification guidance.
+
+Perform one focused current-state audit.
+
+Do **not** mechanically replay each historical baseline.
+
+If an earlier migration adds an artifact that a later migration changes or removes, do not create the obsolete intermediate artifact merely to delete it again.
+
+Do not create intermediate commits simply to mark v6 and v7 on the way to v8.
+
+The repository marker should move directly from the previously verified baseline to the newly verified current baseline after the complete audit succeeds.
+
+Adjacent migrations are the canonical upgrade history. Avoid maintaining every possible version-to-version combination unless real evidence later justifies a compressed checkpoint migration.
 
 ---
 
@@ -865,7 +982,7 @@ Do not rely on remembered syntax for changing tools.
 
 ## Verify orchestration
 
-If reusable sub-agents, custom agents, execution plans, or orchestration rules were added:
+If reusable sub-agents, custom agents, execution plans, or orchestration rules were added or retained:
 
 - verify that each has a distinct recurring purpose
 - verify that responsibilities do not unnecessarily overlap
@@ -876,19 +993,28 @@ If reusable sub-agents, custom agents, execution plans, or orchestration rules w
 - verify that synchronization and integration points are explicit where needed
 - verify that the setup is simpler, faster, safer, or more reliable than using one capable agent
 
-## Perform an ablation review
+## Perform a final ablation review
 
-Challenge every persistent instruction and permanent orchestration primitive.
+Challenge every persistent instruction, file, adapter, playbook, AI-context document, skill, agent, and permanent orchestration primitive that was created, changed, or retained as part of the audit.
 
-Remove instructions, agents, stages, or rules that do not appear likely to materially improve agent performance.
+Remove or avoid anything that does not appear likely to materially improve agent performance.
 
 ## Verify baseline provenance
 
 If a baseline marker is used:
 
 - verify that it reflects the baseline actually reviewed
-- do not advance the version merely because files were copied
+- verify that `source_commit` is the exact upstream commit actually reviewed
+- do not advance the version or source commit merely because files were copied or referenced
 - report any intentional deviations from the baseline
+
+## Verify skipped-version upgrades
+
+If multiple baseline versions were skipped:
+
+- verify that every adjacent migration guide in the chain was considered
+- verify that obsolete intermediate states were not replayed unnecessarily
+- verify that the final repository was audited against the current target state
 
 ## Report uncertainty
 
@@ -903,29 +1029,28 @@ The repository should end up with the simplest appropriate version of something 
 ```text
 Repository
 │
-├── AGENTS.md
+├── AGENTS.md                          # when useful
 │   ├── project facts
 │   ├── verified commands
 │   ├── invariants
 │   ├── hard boundaries
 │   └── pointers
 │
-├── CLAUDE.md or other adapters       # only where useful
+├── CLAUDE.md or other adapters        # only where useful
 │   └── thin compatibility + genuine tool-specific context
 │
-├── AI_ENGINEERING_PLAYBOOK.md        # reusable methodology, on demand
-│
-├── docs/                             # only where useful
+├── ordinary project docs              # only where useful
 │   └── durable project knowledge
 │
-├── agent-native skills / runbooks    # only where useful
-│   └── reusable specialist workflows
+├── playbook / skills / runbooks       # only after demonstrated recurring need
+│   └── reusable methodology or procedures
 │
-├── reusable specialist agents        # only for recurring distinct roles
+├── reusable specialist agents         # only for recurring distinct roles
 │   └── bounded responsibility
 │
-├── baseline marker                   # only when centrally managed
-│   └── last reviewed baseline version
+├── baseline marker                    # when centrally managed
+│   ├── reviewed baseline version
+│   └── exact upstream source commit
 │
 └── tasks / issues / prompts
     ├── current changing context
@@ -933,6 +1058,8 @@ Repository
 ```
 
 This is a conceptual architecture, not a mandatory directory structure.
+
+A valid result may contain only a small subset of these components.
 
 Choose actual filenames, paths, and mechanisms according to current tooling and the repository's real needs.
 
@@ -968,6 +1095,8 @@ When finished, report:
 
 Identify important instructions that should eventually move from prose to deterministic enforcement.
 
+Only include opportunities with clear practical value.
+
 ## 5. Verification performed
 
 Report:
@@ -985,7 +1114,9 @@ State anything important that could not be established.
 
 ## 7. Ablation result
 
-State which instructions, specialist agents, stages, or rules were removed, scoped, relocated, or deliberately not created because they did not earn their context or coordination cost.
+State which proposed or existing instructions, files, playbooks, context documents, skills, specialist agents, stages, or rules were removed, scoped, relocated, or deliberately not created because they did not earn their context, maintenance, or coordination cost.
+
+Include meaningful pre-creation decisions, not only things removed at the end.
 
 ## 8. Baseline provenance
 
@@ -993,9 +1124,12 @@ If baseline versioning is used, report:
 
 - previous baseline version
 - new baseline version
+- exact upstream source commit reviewed
 - material baseline changes adopted
 - material baseline changes deliberately not adopted
 - reason for any intentional deviation
+
+If multiple versions were skipped, state which adjacent migration guides were composed.
 
 ## 9. Recommended next improvement
 
@@ -1003,4 +1137,4 @@ Only include one if it has clear practical value.
 
 Do not judge success by how many files, rules, documents, agents, or workflow stages were created.
 
-Judge success by whether future coding agents receive the right information at the right time, execute work with the simplest reliable topology, and operate with the least unnecessary context and coordination overhead.
+Judge success by whether future coding agents receive the right information at the right time, execute work with the simplest reliable topology, and operate with the least unnecessary context, maintenance, and coordination overhead.
