@@ -1,6 +1,6 @@
 # AI Engineering repository instructions
 
-This repository is the canonical source for Johnny Krogsgaard's versioned AI Engineering Bootstrap.
+This repository is the canonical source for the versioned AI Engineering Bootstrap.
 
 ## Purpose
 
@@ -59,6 +59,12 @@ Check:
 - whether new orchestration complexity is justified
 - whether migration guidance is sufficient to upgrade an older participating repository without replaying the full history
 
-## Scope
+## Public scope
 
-Do not store project-specific domain facts, secrets, credentials, production configuration, or task-specific context here.
+This repository may be consumed by external users and coding agents.
+
+Keep examples generic and portable. Do not assume access to private repositories, private tooling, internal infrastructure, or personal context.
+
+## Safety
+
+Do not store project-specific domain facts, secrets, credentials, production configuration, personal data, or task-specific context here.
