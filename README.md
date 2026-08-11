@@ -26,7 +26,7 @@ Use the same prompt for new and existing repositories. The bootstrap adapts the 
 
 See `VERSION` for the current baseline version and `BOOTSTRAP.md` for the canonical bootstrap prompt.
 
-Current version: **v6**.
+Current version: **v7**.
 
 ## Repository model
 
@@ -69,6 +69,7 @@ Do not mechanically recreate obsolete intermediate states. If an earlier migrati
 - semantic upgrades rather than blind synchronization
 - pre-creation and final ablation
 - deterministic enforcement over prose where practical
+- deterministic control flow for stages that must not be skipped
 - native agent capabilities over custom infrastructure where sufficient
 - the simplest sufficient execution topology
 - every persistent instruction must earn its context cost
@@ -81,7 +82,7 @@ A new baseline version should update, at minimum:
 1. `BOOTSTRAP.md`
 2. `VERSION`
 3. `CHANGELOG.md`
-4. the relevant adjacent migration guide, for example `migrations/v5-to-v6.md`
+4. the relevant adjacent migration guide, for example `migrations/v6-to-v7.md`
 5. `templates/.ai-engineering.yml`
 
 Do not advance the version unless the baseline, migration guidance, changelog, and provenance template describe the same release.
