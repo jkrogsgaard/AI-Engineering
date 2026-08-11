@@ -1,6 +1,6 @@
 # AI Engineering Bootstrap
 
-**Baseline version: v6**
+**Baseline version: v7**
 
 ## Target repository
 
@@ -10,7 +10,7 @@ This AI-Engineering repository is the baseline source, not the target repository
 
 If the target repository already records an older AI Engineering baseline, treat this as an upgrade audit.
 
-Before changing anything, read the adjacent migration guides from the recorded version through v6. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
+Before changing anything, read the adjacent migration guides from the recorded version through v7. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
 
 ## Set up this repository for effective AI-assisted engineering
 
@@ -177,6 +177,7 @@ Also determine which execution capabilities are actually available, including wh
 - sub-agents or custom agents
 - isolated sessions
 - branches or worktrees
+- scripted or programmatic orchestration of delegated work
 - skills
 - hooks
 - MCP tools
@@ -599,6 +600,25 @@ Default to the simplest topology that can reliably complete the work.
 
 Do not introduce multi-agent orchestration merely because the tooling supports it.
 
+Topology describes the shape of the work. Also decide what enforces it:
+
+- the agent's own turn-by-turn judgment
+- deterministic control flow the agent cannot skip or improvise
+
+Model-directed delegation adapts well when the right next step genuinely depends on what earlier stages found.
+
+Deterministic orchestration guarantees that a stage runs the same way for every item, every time.
+
+Prefer deterministic control flow when a stage must not be skipped, reordered, or applied inconsistently across many items. Verification, gating, and aggregation over many items are the usual cases.
+
+Prefer model-directed delegation while the plan is still being discovered. Do not encode a plan in control flow before that plan is stable.
+
+This is the existing preference for deterministic enforcement over prose, applied to execution rather than to rules.
+
+Keep deterministic work in code. Filtering, deduplication, thresholds, routing, and aggregation between stages belong in ordinary code rather than in an additional model call. Code is exact, auditable, and free.
+
+Fan-out multiplies cost. Scale the number of parallel workers and the depth of verification to the value of the task rather than to what the tooling permits.
+
 Use delegation when it materially improves one or more of:
 
 - context isolation
@@ -614,6 +634,8 @@ For delegated work, prefer bounded contracts:
 - expected output
 - completion or acceptance condition
 
+When delegated results are aggregated, filtered, or routed programmatically, prefer a machine-checkable output contract such as a schema over prose.
+
 Keep orchestration logic with the orchestrator rather than duplicating the whole workflow into every worker.
 
 Prefer parallel read-heavy work over parallel writes.
@@ -623,6 +645,8 @@ When multiple agents may modify code, define ownership or isolation boundaries a
 Do not create permanent custom agents for one-off tasks.
 
 Create reusable agent definitions only when the same specialist role has recurring value.
+
+Apply the same rule to orchestration definitions. Keep a one-off orchestration task-scoped, and persist a reusable one only when the same orchestration actually recurs.
 
 When independent verification matters, do not contaminate the reviewer with unnecessary implementation reasoning or conclusions.
 
@@ -652,7 +676,9 @@ For every piece of information, ask:
 | Can a capable agent reliably infer it from the repository? | Usually do not document it |
 | Can it be enforced mechanically? | Prefer code, tests, types, schemas, permissions, hooks, linting, CI, or other deterministic controls |
 | Does this work benefit materially from isolated or parallel reasoning? | Delegate to a sub-agent or separate execution branch |
+| Must a stage run the same way for every item, regardless of model judgment? | Deterministic control flow, gate, or automated check rather than a prose instruction |
 | Does the same specialist role recur across tasks? | Reusable native sub-agent or custom-agent definition |
+| Does the same orchestration recur across tasks? | Reusable orchestration definition, otherwise keep it task-scoped |
 | Does the task contain several dependent stages or require durable progress tracking? | Task-scoped execution plan when useful |
 
 Use the narrowest useful scope.
@@ -731,6 +757,8 @@ Examples:
 | code ownership | CODEOWNERS or review rules |
 | write isolation | branches, worktrees, sandboxes, or ownership boundaries |
 | required independent verification | separate review stage or automated check |
+| a stage that must never be skipped | deterministic control flow or a CI gate |
+| delegated result format | schema or other machine-checkable output contract |
 | prohibited tools or production actions | permissions, sandboxing, or hooks |
 
 Do not necessarily implement every possible control as part of this task.
@@ -849,6 +877,8 @@ For every permanent custom agent, delegation rule, stage, gate, or coordination 
 
 If the answer is no, simplify the topology.
 
+For every persisted orchestration definition, also ask whether the same orchestration has actually recurred. If it has not, keep the work task-scoped instead.
+
 When an agent repeatedly makes a preventable mistake:
 
 1. identify the root cause
@@ -872,7 +902,7 @@ The recommended marker is:
 baseline:
   id: ai-engineering-bootstrap
   repository: jkrogsgaard/AI-Engineering
-  version: 6
+  version: 7
   source_commit: <exact-upstream-commit>
   last_reviewed: YYYY-MM-DD
 ```
@@ -985,6 +1015,8 @@ Do not rely on remembered syntax for changing tools.
 If reusable sub-agents, custom agents, execution plans, or orchestration rules were added or retained:
 
 - verify that each has a distinct recurring purpose
+- verify that stages which must not be skipped are enforced by control flow or an automated check rather than by prose
+- verify that persisted orchestration definitions correspond to recurring work rather than to a single past task
 - verify that responsibilities do not unnecessarily overlap
 - verify that delegated work has a clear expected output
 - verify that parallel writers cannot accidentally modify the same ownership area without intentional isolation
@@ -1047,6 +1079,9 @@ Repository
 │
 ├── reusable specialist agents         # only for recurring distinct roles
 │   └── bounded responsibility
+│
+├── reusable orchestration            # only for recurring orchestration
+│   └── deterministic stages that must not be skipped
 │
 ├── baseline marker                    # when centrally managed
 │   ├── reviewed baseline version

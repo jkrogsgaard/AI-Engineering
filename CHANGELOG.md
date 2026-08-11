@@ -2,6 +2,31 @@
 
 This changelog records material changes to the AI Engineering Bootstrap baseline.
 
+## v7 - 2026-08-11
+
+### Added
+
+- What enforces the plan as an explicit execution-design question, separate from the shape of the topology: the agent's turn-by-turn judgment, or deterministic control flow the agent cannot skip or improvise.
+- Guidance to prefer deterministic control flow when a stage must not be skipped, reordered, or applied inconsistently across many items, and to prefer model-directed delegation while the plan is still being discovered.
+- Guidance to keep filtering, deduplication, thresholds, routing, and aggregation between stages in ordinary code rather than in an additional model call.
+- Preference for a machine-checkable output contract, such as a schema, when delegated results are aggregated, filtered, or routed programmatically.
+- Explicit note that fan-out multiplies cost, and that parallel width and verification depth should scale to the value of the task rather than to what the tooling permits.
+- Reuse symmetry for orchestration: a one-off orchestration stays task-scoped, and an orchestration definition is persisted only when the same orchestration actually recurs.
+- Inspection of scripted or programmatic orchestration among the execution capabilities a repository may already have.
+- Context-placement, mechanical-enforcement, ablation, and verification entries for the above.
+
+### Changed
+
+- Section 5.9 now separates execution topology from plan enforcement. v6 described only the shape of the work.
+- The mechanical-enforcement review now covers stages that must never be skipped and the format of delegated results.
+- Orchestration ablation now also challenges persisted orchestration definitions, not only permanent agents, stages, gates, and delegation rules.
+
+### Philosophy
+
+v7 extends the baseline's existing preference for deterministic enforcement over prose from rules to execution.
+
+It does not introduce a new orchestration framework, vocabulary, or required artifact. Deterministic orchestration is a tool for the small number of stages that must be guaranteed, not a new default. A one-agent loop remains a valid and often preferable execution topology.
+
 ## v6 - 2026-08-09
 
 ### Added
