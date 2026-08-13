@@ -15,6 +15,7 @@ Do not turn this repository into a project-specific instruction set or a catalog
 - `CHANGELOG.md` records material baseline changes.
 - `migrations/` explains semantic upgrades between versions.
 - `templates/` contains small adoption templates, not generated copies of project instructions.
+- `MAINTENANCE.md` is the source-repository radar, self-audit, and subtractive-release runbook.
 
 ## Release invariant
 
@@ -29,6 +30,14 @@ A baseline version must not be advanced unless all of the following agree:
 If one is missing or inconsistent, the release is incomplete.
 
 Once a baseline version has been adopted by a participating project, treat that version as immutable. Further semantic changes belong in the next baseline version.
+
+## Maintenance gate
+
+Before advancing a baseline, follow `MAINTENANCE.md`.
+
+The current changelog entry must record both a `Removed` review and a `Maintenance review`. A release candidate must complete an explicit source self-audit without applying ordinary target-repository adoption steps to this repository.
+
+Run `scripts/verify-release.sh` before declaring the release complete. The same check must pass in CI.
 
 ## Editing principles
 
@@ -78,6 +87,8 @@ Check:
 - whether new persistent artifacts survive pre-creation ablation
 - whether new orchestration complexity is justified
 - whether migration guidance is sufficient to upgrade an older participating repository without replaying obsolete intermediate states
+- whether the latest radar, source self-audit, and subtractive release review satisfy `MAINTENANCE.md`
+- whether `scripts/verify-release.sh` passes
 
 ## Public scope
 

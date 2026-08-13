@@ -26,7 +26,7 @@ Use the same prompt for new and existing repositories. The bootstrap adapts the 
 
 See `VERSION` for the current baseline version and `BOOTSTRAP.md` for the canonical bootstrap prompt.
 
-Current version: **v7**.
+Current version: **v8**.
 
 ## Repository model
 
@@ -36,6 +36,8 @@ Current version: **v7**.
 - `migrations/` contains adjacent semantic upgrade guides between versions.
 - `templates/.ai-engineering.yml` is the recommended project-side provenance marker.
 - `AGENTS.md` contains maintenance rules for this repository itself.
+- `MAINTENANCE.md` contains the source-repository radar, self-audit, and subtractive-release procedure.
+- `scripts/verify-release.sh` verifies the release invariant and maintenance gate locally and in CI.
 
 ## How projects consume the baseline
 
@@ -72,6 +74,7 @@ Do not mechanically recreate obsolete intermediate states. If an earlier migrati
 - deterministic control flow for stages that must not be skipped
 - native agent capabilities over custom infrastructure where sufficient
 - the simplest sufficient execution topology
+- shared task ownership when work spans checkouts, machines, or agent tools
 - every persistent instruction must earn its context cost
 - every delegation and coordination boundary must earn its coordination cost
 
@@ -82,10 +85,16 @@ A new baseline version should update, at minimum:
 1. `BOOTSTRAP.md`
 2. `VERSION`
 3. `CHANGELOG.md`
-4. the relevant adjacent migration guide, for example `migrations/v6-to-v7.md`
+4. the relevant adjacent migration guide, for example `migrations/v7-to-v8.md`
 5. `templates/.ai-engineering.yml`
 
 Do not advance the version unless the baseline, migration guidance, changelog, and provenance template describe the same release.
+
+Before release, follow `MAINTENANCE.md`, complete the source self-audit and subtractive review, record `Removed` and `Maintenance review` in the changelog, and run:
+
+```sh
+./scripts/verify-release.sh
+```
 
 Once a baseline has been adopted by a participating project, treat that baseline version as immutable. Further semantic changes belong in the next baseline version.
 
