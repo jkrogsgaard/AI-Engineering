@@ -2,6 +2,49 @@
 
 This changelog records material changes to the AI Engineering Bootstrap baseline.
 
+## v8 - 2026-08-13
+
+### Added
+
+- Cross-checkout coordination as a distinct concern from local write isolation.
+- Guidance to use a shared coordination surface when meaningful work spans people, machines, checkouts, cloud environments, or independent agent tools.
+- A minimal discover, claim, isolate, publish, integrate, and release protocol for work with realistic overlap risk.
+- One active writer per branch as the default, with explicit ownership or sequencing for overlapping change areas.
+- Guidance for visible handoff, abandonment, and stale-work handling.
+- Proportional evaluation of protected branches, required pull requests, checks, reviews, code ownership, and merge queues.
+- Inspection, context-placement, mechanical-enforcement, verification, reporting, and ablation entries for cross-checkout coordination.
+- A source-repository maintenance runbook covering monthly radar, quarterly self-audit, subtractive review, and the release gate.
+- A deterministic local and CI check for version consistency, migration continuity, provenance-template consistency, and required maintenance evidence.
+
+### Changed
+
+- Repository inspection now covers shared task and pull-request state, task claims, branch ownership, handoff conventions, stale work, and integration rules.
+- The agent-environment review now asks whether ownership and status are visible across machines and agent tools when needed.
+- Local worktrees, sessions, plans, unpushed branches, and lock files are explicitly insufficient as the only coordination signal for cross-machine or cross-tool work.
+- Coordination requirements now scale to realistic collision and duplicate-work risk; trivial or genuinely solo work does not require artificial issues or pull requests.
+- Baseline releases now require a recent radar, explicit source self-audit, subtractive review, and recorded maintenance evidence.
+
+### Removed
+
+- A duplicate copy of the pre-creation ablation question from the core-principles section. Section 11 remains the canonical procedure.
+- No v7 capability or recommendation was removed.
+
+### Maintenance review
+
+- Completed 2026-08-13 against this repository as both baseline source and audit subject.
+- Reviewed current primary documentation and changelogs for OpenAI/Codex, Anthropic/Claude Code, GitHub/Copilot and Actions, the Model Context Protocol, and Agent Skills. No additional baseline change was justified for v8.
+- Confirmed the Claude Code `@AGENTS.md` compatibility example, the Agent Skills `SKILL.md` recommendation, and `actions/checkout@v7`; no stale example syntax was found.
+- Consolidated the duplicated pre-creation ablation wording into its existing canonical section. No deletion quota was applied, and no other removal survived the evidence and clarity review.
+- Added one read-only monthly maintenance automation; January, April, July, and October runs include the quarterly source self-audit. It cannot edit, version, branch, commit, open issues or pull requests, or release.
+- Retained `MAINTENANCE.md`, the verification script, and its CI workflow after pre-creation ablation: the runbook keeps source-only maintenance out of the target baseline, while the small script and workflow enforce release evidence that prose alone cannot guarantee.
+- No candidate was deferred.
+
+### Philosophy
+
+v8 separates **where work happens safely** from **how others know the work is happening**.
+
+It does not add a required tracker, lock service, agent registry, or orchestration framework. Existing shared development platforms remain the preferred coordination layer, native agent capabilities remain the preferred local isolation layer, and low-risk repositories may validly adopt no new artifact.
+
 ## v7 - 2026-08-11
 
 ### Added

@@ -1,6 +1,6 @@
 # AI Engineering Bootstrap
 
-**Baseline version: v7**
+**Baseline version: v8**
 
 ## Target repository
 
@@ -10,7 +10,7 @@ This AI-Engineering repository is the baseline source, not the target repository
 
 If the target repository already records an older AI Engineering baseline, treat this as an upgrade audit.
 
-Before changing anything, read the adjacent migration guides from the recorded version through v7. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
+Before changing anything, read the adjacent migration guides from the recorded version through v8. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
 
 ## Set up this repository for effective AI-assisted engineering
 
@@ -57,11 +57,7 @@ Every delegation, execution stage, and coordination boundary should earn its coo
 
 Ablate before creating as well as after creating.
 
-Before adding a persistent instruction, playbook, context document, skill, runbook, custom agent, adapter, hook, or orchestration mechanism, ask:
-
-> Would a capable modern coding agent materially perform worse in this repository without this?
-
-If the answer is no, do not create it.
+Apply the pre-creation and final ablation procedure in section 11.
 
 ---
 
@@ -102,6 +98,9 @@ Inspect enough of the repository to understand:
 - MCP or external tool configuration
 - agent permissions and sandboxing
 - worktree, branch, sandbox, or other task-isolation mechanisms
+- shared task, issue, pull-request, or other cross-checkout coordination mechanisms
+- task-claiming, branch-ownership, handoff, and stale-work conventions
+- default-branch protection and integration rules
 - existing orchestration or delegation rules
 - an existing AI Engineering provenance marker
 
@@ -186,6 +185,7 @@ Also determine which execution capabilities are actually available, including wh
 - permission controls
 - execution-plan mechanisms
 - persistent task state
+- shared task ownership and status visible across machines and agent tools
 - CI and automated verification
 
 Do not recreate capabilities in repository instructions that the active agent harness already provides natively.
@@ -662,6 +662,37 @@ Do not require an execution plan for trivial work.
 
 ---
 
+## 5.10 Cross-checkout coordination
+
+Isolation and coordination solve different problems.
+
+A branch, worktree, sandbox, or isolated session prevents concurrent writers from changing the same local files. It does not tell a person or agent in another checkout, on another machine, or in another agent harness that the task is already in progress.
+
+When a repository is actively shared across people, machines, or independent agent tools, use a coordination surface that all relevant participants can observe. Prefer the repository's existing issue tracker, pull requests, remote branches, or equivalent shared system over local agent state or new repository-specific infrastructure.
+
+For meaningful work that could overlap:
+
+1. **Discover** — refresh shared state without overwriting local work, then inspect relevant active tasks, pull requests, and remote branches before implementation.
+2. **Claim** — record an owner, scope, status, and intended branch or change area in the shared coordination surface before substantial writing begins.
+3. **Isolate** — use a dedicated branch, worktree, sandbox, or equivalent checkout. Default to one active writer per branch; require explicit synchronization if a proven workflow shares one. If separate branches touch the same change area, agree on ownership or sequence before writing in parallel.
+4. **Publish** — make longer-running work visible early enough to prevent duplicate effort, for example through a pushed branch, linked task, status update, or draft pull request.
+5. **Integrate** — refresh against the current target, run the relevant verification, and merge through the repository's established review and integration path.
+6. **Release** — mark completed, handed-off, blocked, or abandoned work explicitly, and remove stale claims and isolated checkouts when they are no longer needed.
+
+Treat task ownership as a coordination signal, not as a permanent lock. A claim should be easy to inspect, hand off, and release.
+
+Do not use an unpushed branch, local session metadata, or a local lock file as the only coordination signal for work that spans machines or tools.
+
+Do not require an issue, branch, or pull request for every trivial edit. Scale coordination overhead to the realistic risk and cost of collision or duplicate work.
+
+If no shared coordination surface is available, make the user or task orchestrator the explicit synchronization point and report the overlap risk rather than silently assuming exclusive ownership.
+
+Prefer repository-host controls for important integration boundaries. Protected default branches, required checks, required review, code ownership, or merge queues may be appropriate when the repository's collaboration volume and risk justify them.
+
+Do not add custom lock services, agent registries, or coordination files merely because multiple agent tools are present. Persist additional coordination infrastructure only after the existing shared development platform has proved insufficient.
+
+---
+
 # 6. Context placement test
 
 For every piece of information, ask:
@@ -676,6 +707,7 @@ For every piece of information, ask:
 | Can a capable agent reliably infer it from the repository? | Usually do not document it |
 | Can it be enforced mechanically? | Prefer code, tests, types, schemas, permissions, hooks, linting, CI, or other deterministic controls |
 | Does this work benefit materially from isolated or parallel reasoning? | Delegate to a sub-agent or separate execution branch |
+| Must ownership or status be visible across checkouts, machines, or agent tools? | Shared issue, pull request, remote branch, or existing team coordination system |
 | Must a stage run the same way for every item, regardless of model judgment? | Deterministic control flow, gate, or automated check rather than a prose instruction |
 | Does the same specialist role recur across tasks? | Reusable native sub-agent or custom-agent definition |
 | Does the same orchestration recur across tasks? | Reusable orchestration definition, otherwise keep it task-scoped |
@@ -756,6 +788,8 @@ Examples:
 | required tests | CI |
 | code ownership | CODEOWNERS or review rules |
 | write isolation | branches, worktrees, sandboxes, or ownership boundaries |
+| cross-checkout task ownership | shared issue or pull-request assignment and visible status |
+| protected integration branch | repository rules requiring pull requests, checks, or review |
 | required independent verification | separate review stage or automated check |
 | a stage that must never be skipped | deterministic control flow or a CI gate |
 | delegated result format | schema or other machine-checkable output contract |
@@ -902,7 +936,7 @@ The recommended marker is:
 baseline:
   id: ai-engineering-bootstrap
   repository: jkrogsgaard/AI-Engineering
-  version: 7
+  version: 8
   source_commit: <exact-upstream-commit>
   last_reviewed: YYYY-MM-DD
 ```
@@ -1025,6 +1059,20 @@ If reusable sub-agents, custom agents, execution plans, or orchestration rules w
 - verify that synchronization and integration points are explicit where needed
 - verify that the setup is simpler, faster, safer, or more reliable than using one capable agent
 
+## Verify cross-checkout coordination
+
+If the repository is shared across people, machines, or independent agent tools:
+
+- verify that meaningful in-progress work and ownership are discoverable from another checkout
+- verify that a participant checks shared active work before beginning an overlapping change
+- verify that two writers do not silently share one branch or checkout
+- verify that task claims can be handed off, released, and distinguished from stale work
+- verify that local worktrees or session state are not mistaken for cross-machine coordination
+- verify that integration uses the repository's current target state and required checks or review
+- verify that the chosen protocol is lighter than the duplicate work or collision risk it addresses
+
+Do not manufacture task trackers, pull requests, or branch rules for a repository whose actual collaboration pattern does not justify them.
+
 ## Perform a final ablation review
 
 Challenge every persistent instruction, file, adapter, playbook, AI-context document, skill, agent, and permanent orchestration primitive that was created, changed, or retained as part of the audit.
@@ -1124,6 +1172,7 @@ When finished, report:
 - global versus scoped context
 - documentation versus skills
 - execution topology and delegation decisions
+- shared task ownership and cross-checkout coordination decisions
 - what remains task-specific
 
 ## 4. Mechanical enforcement opportunities
