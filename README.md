@@ -26,7 +26,7 @@ Use the same prompt for new and existing repositories. The bootstrap adapts the 
 
 See `VERSION` for the current baseline version and `BOOTSTRAP.md` for the canonical bootstrap prompt.
 
-Current version: **v8**.
+Current version: **v9**.
 
 ## Repository model
 
@@ -60,7 +60,7 @@ The baseline version is therefore a **review provenance marker**, not a guarante
 
 Migration guides are adjacent and composable.
 
-A repository moving from v5 directly to v8 should read `v5-to-v6`, `v6-to-v7`, and `v7-to-v8` in order, then perform one focused audit of the net target state.
+A repository moving from v6 directly to v9 should read `v6-to-v7`, `v7-to-v8`, and `v8-to-v9` in order, then perform one focused audit of the net target state.
 
 Do not mechanically recreate obsolete intermediate states. If an earlier migration adds something that a later migration changes or removes, reason about the final current state and make only the changes that still matter.
 
@@ -85,7 +85,7 @@ A new baseline version should update, at minimum:
 1. `BOOTSTRAP.md`
 2. `VERSION`
 3. `CHANGELOG.md`
-4. the relevant adjacent migration guide, for example `migrations/v7-to-v8.md`
+4. the relevant adjacent migration guide, for example `migrations/v8-to-v9.md`
 5. `templates/.ai-engineering.yml`
 
 Do not advance the version unless the baseline, migration guidance, changelog, and provenance template describe the same release.

@@ -2,6 +2,45 @@
 
 This changelog records material changes to the AI Engineering Bootstrap baseline.
 
+## v9 - 2026-08-30
+
+### Added
+
+- Model-upgrade ablation as a third ablation trigger: when the underlying models materially improve, re-run ablation across persistent instructions, skills, playbooks, agents, and orchestration, distinguishing durable repository truth from compensation for model weaknesses.
+- A concrete checklist of compensatory patterns to sweep for: aggressive emphasis and repetition, defensive "if in doubt" triggers, forced self-verification steps, reasoning-echo instructions, enumerated cases a brief instruction now covers, and procedure where outcome-level guidance suffices.
+- An agent-authored memory policy: harness-persisted agent memory is persistent context that must earn its cost; each repository decides explicitly whether it is enabled, audits it, and promotes durable lessons into canonical sources.
+- An evaluation-first bar for skills: run a representative task without the skill first and keep it only when it demonstrably outperforms default behavior; keep rosters small, descriptions precise, and references one level deep.
+- A preference for conditionally loaded scoped rules over always-loaded root-file content for subsystem-specific conventions, where tooling supports them.
+- Inspection, review, placement, and verification entries for the above.
+
+### Changed
+
+- The root instruction file size target is now grounded in current vendor guidance (under 200 lines per always-loaded file, with reduced adherence beyond) and instruction-following behavior, rather than stated as taste; the stricter under-100-line default is unchanged.
+- The trimming criterion is explicit: cut what a capable agent can derive from the codebase; keep pitfalls, rationale, and conventions that differ from tool defaults.
+- The final report now scales to the size of the audit instead of demanding full ceremony from small repositories.
+- Skipped-version examples updated to the current migration chain.
+
+### Removed
+
+- The sixteen-principle seed list for `AI_ENGINEERING_PLAYBOOK.md`. Generic engineering methodology is default behavior for current capable models, and vendor guidance warns that over-prescriptive instruction can degrade output. The playbook section itself remains for repositories with demonstrated recurring need. Existing playbooks are re-ablated during upgrade, not mechanically deleted.
+- Five of nine generic-statement examples in section 5.2 and four redundant entries in the section 2 mechanism search list. No semantic change.
+
+### Maintenance review
+
+- Completed 2026-08-30 against this repository as both baseline source and audit subject.
+- Radar scan completed 2026-08-30. Reviewed current primary documentation for Anthropic Claude 5-generation prompting guidance, Claude Code memory, rules, skills, and plugins, Agent Skills authoring guidance, and the `AGENTS.md` convention. Surveyed instruction-following and long-context research and skills benchmarks as evidence-tier candidates.
+- Verified by direct fetch on 2026-08-30: the Claude Code memory documentation (instruction files are context, not enforced configuration; under-200-line target; `.claude/rules/` conditional loading; automatic memory on by default; the `@AGENTS.md` import as the documented compatibility pattern), the Claude Fable 5 prompting guide (re-evaluate instructions on capability improvements; prior-model skills often too prescriptive and can degrade output; audit for reasoning-echo instructions), and the Agent Skills authoring best practices (evaluations before documentation; references one level deep; description-driven selection).
+- Evidence-tier candidates (instruction-count adherence decay, long-context degradation, curated-skill benchmarks) were corroborated through secondary sources only; they informed emphasis, and no numeric claim from them was added to the baseline. Adopting specific figures is deferred pending primary verification.
+- Deferred candidate: packaging the upgrade audit as a distributable Agent Skills procedure (`SKILL.md` adapter). Deferred so the v9 text stabilizes first; it failed pre-creation ablation only on timing, not on value.
+- Subtractive review recorded: the playbook seed list and redundant examples were removed; the additions are the model-upgrade ablation, the memory policy, and the skills bar. No deletion quota was applied. The bootstrap grew by a small net amount, explained by the two new policy areas; the removals are semantic, not cosmetic.
+- Confirmed the `@AGENTS.md` compatibility example and the Agent Skills `SKILL.md` recommendation against current documentation; the adapter pattern is now vendor-documented verbatim.
+
+### Philosophy
+
+v9 separates **durable repository truth** from **compensation for model weaknesses**.
+
+Commands, boundaries, invariants, and non-obvious facts age well. Emphasis, repetition, defensive triggers, and prescriptive procedure expire as models improve — and current vendor guidance states they can actively degrade the output of newer models. A capability jump in the underlying models is therefore an explicit ablation trigger, not background news. The baseline's job is unchanged: the smallest amount of durable context that reliably produces excellent engineering work.
+
 ## v8 - 2026-08-13
 
 ### Added

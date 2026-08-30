@@ -1,6 +1,6 @@
 # AI Engineering Bootstrap
 
-**Baseline version: v8**
+**Baseline version: v9**
 
 ## Target repository
 
@@ -10,7 +10,7 @@ This AI-Engineering repository is the baseline source, not the target repository
 
 If the target repository already records an older AI Engineering baseline, treat this as an upgrade audit.
 
-Before changing anything, read the adjacent migration guides from the recorded version through v8. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
+Before changing anything, read the adjacent migration guides from the recorded version through v9. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
 
 ## Set up this repository for effective AI-assisted engineering
 
@@ -55,9 +55,9 @@ Every persistent file or compatibility layer should earn its maintenance cost.
 
 Every delegation, execution stage, and coordination boundary should earn its coordination cost.
 
-Ablate before creating as well as after creating.
+Ablate before creating, after creating, and again when the underlying agent models materially improve. Instructions written to compensate for a weaker model generation expire.
 
-Apply the pre-creation and final ablation procedure in section 11.
+Apply the pre-creation, final, and model-upgrade ablation procedures in section 11.
 
 ---
 
@@ -92,7 +92,8 @@ Inspect enough of the repository to understand:
 - existing skills
 - existing hooks
 - existing AI-agent instructions
-- nested or scoped instruction files
+- nested, scoped, or conditionally loaded instruction files
+- agent-authored memory or automatic note-taking state
 - existing sub-agents or custom agents
 - existing execution plans or planning conventions
 - MCP or external tool configuration
@@ -108,14 +109,10 @@ Search specifically for existing mechanisms such as:
 
 - `AGENTS.md`
 - `CLAUDE.md`
-- `.claude/`
-- `.claude/agents/`
+- `.claude/`, including `.claude/rules/` and `.claude/agents/`
 - `.codex/`
-- `.codex/agents/`
 - `.cursor/rules/`
 - skills
-- prompts
-- coding instructions
 - Copilot instructions
 - Cursor rules
 - Codex instructions
@@ -217,6 +214,7 @@ Review them for:
 - stale architecture
 - outdated tooling assumptions
 - generic advice modern agents no longer need
+- compensatory instructions written for weaker model generations (section 11)
 - task-specific context stored permanently
 - procedures that belong in skills or runbooks
 - durable knowledge that belongs in ordinary project documentation
@@ -257,6 +255,8 @@ Keep the root instruction file short and high-signal.
 Our default target is under 100 lines where practical.
 
 Treat 150+ lines as a signal to review whether content should be removed, scoped, moved to documentation, or moved into a skill.
+
+This target is grounded, not taste: current vendor guidance targets under 200 lines for an always-loaded instruction file and warns that longer files reduce adherence, and instruction-following research finds compliance degrades as concurrent rules accumulate. Aim below the vendor ceiling, not at it.
 
 Tool-specific documented limits or recommendations take precedence.
 
@@ -343,13 +343,8 @@ Include verification requirements only when they are specific to this project or
 Avoid generic statements such as:
 
 - write clean code
-- handle errors
 - think carefully
-- use good naming
-- write maintainable code
 - follow SOLID
-- use small functions
-- avoid bugs
 - consider security
 
 unless a concrete version of the rule addresses a recurring observed failure in this repository.
@@ -368,6 +363,8 @@ Also avoid large amounts of:
 Do not use persistent context merely because information is useful somewhere.
 
 Use persistent context only when it is useful often enough to justify always loading it.
+
+When trimming, cut what a capable agent can derive from the codebase, such as directory layouts, dependency lists, and architecture overviews. Keep pitfalls, rationale, and conventions that differ from tool defaults.
 
 ---
 
@@ -423,6 +420,8 @@ Prefer:
 - small native adapters
 - scoped rules where appropriate
 
+Where the tooling supports it, prefer scoped rules that load conditionally, only when matching paths or files are touched. Conditional rules cost no context until they apply, which makes them the right home for subsystem-specific conventions that would otherwise inflate the root file.
+
 Avoid maintaining several full copies of the same instructions.
 
 ---
@@ -450,30 +449,9 @@ When justified, the playbook is deeper reference material and does not need to b
 
 The playbook should contain reusable engineering methodology rather than repository facts.
 
-A possible seed is:
+If a playbook is justified, seed it only with methodology this repository has demonstrably needed, phrased as brief outcome-level guidance rather than step-by-step procedure.
 
-1. Understand before changing.
-2. Optimize for the requested outcome, not merely the literal wording, while keeping scope to the smallest change necessary to achieve that outcome.
-3. Prefer the simplest sufficient solution.
-4. Make surgical changes.
-5. Work in small vertical slices.
-6. Use short implementation and verification loops.
-7. Verify actual behavior rather than plausible-looking code.
-8. Never allow failure to silently resemble success.
-9. Separate verified facts, inference, and unknowns.
-10. Enforce hard security and correctness boundaries mechanically.
-11. Choose the simplest sufficient execution topology. Default to one capable agent and a tight loop. Use sub-agents, parallel branches, or independent reviewers only when isolation, parallelism, specialization, or independent verification materially improves the result. Give each delegated task a bounded responsibility and explicit expected output. Avoid parallel writes to overlapping code unless the tooling provides safe isolation and an intentional integration step.
-12. Challenge the solution before declaring it complete.
-13. Never report unverified work as done.
-14. Generalize only after repeated evidence.
-15. Remove instructions that no longer improve agent behavior.
-16. Make every delegation, execution stage, and coordination boundary earn its coordination cost.
-
-Treat these principles as a possible seed, not a mandatory minimum and not a reason by itself to create the file.
-
-Do not expand them into a large handbook unless the repository has demonstrated recurring need for the expanded guidance.
-
-Remove, scope, or relocate principles that do not materially improve agent behavior.
+Do not import a generic list of software-engineering principles. Capable current models follow them by default, and over-prescriptive instruction can degrade their output.
 
 Specialized procedures such as migrations, security reviews, browser verification, releases, incident response, or AI-specific testing usually belong in skills or runbooks rather than in the core playbook.
 
@@ -546,7 +524,7 @@ Examples:
 - performance investigations
 - recurring repository upgrade procedures
 
-Prefer an open Agent Skills-compatible `SKILL.md` format when the active tooling supports it well.
+Prefer an open Agent Skills-compatible `SKILL.md` format when the active tooling supports it well. Multiple major agent tools now support the format natively, which makes it the default portable choice for procedures.
 
 Do not assume one physical directory has native meaning across all agents.
 
@@ -560,6 +538,12 @@ Where several tools are supported, prefer:
 rather than several divergent copies.
 
 Apply pre-creation ablation before adding a skill or runbook merely because the procedure might someday be useful.
+
+Before persisting a skill, evaluate it: run a representative task without the skill first, and keep the skill only when it demonstrably outperforms the agent's default behavior. Current skill-authoring guidance is to create evaluations before writing extensive documentation.
+
+Keep the skill roster small and each description precise. Agents select skills by description, and selection is the common failure point, so spend effort on the trigger rather than the body.
+
+Keep bundled reference material one level deep from the entry file, and reserve prescriptive step-by-step detail for fragile operations where exact sequence matters.
 
 ---
 
@@ -693,6 +677,24 @@ Do not add custom lock services, agent registries, or coordination files merely 
 
 ---
 
+## 5.11 Agent-authored memory
+
+Some harnesses let the agent persist its own notes across sessions and load them automatically. In current Claude Code this automatic memory is enabled by default.
+
+Agent-authored memory is persistent context and follows the same rule as everything else: it must earn its context cost.
+
+Decide explicitly per repository whether it stays enabled. Do not leave it unmanaged.
+
+Where it is enabled:
+
+- audit it periodically and delete stale or wrong notes
+- promote a lesson that proves durable into the canonical instruction file, a scoped rule, or documentation, then delete the note
+- do not let it duplicate or contradict canonical instructions
+
+Agent memory is typically machine-local. Never treat it as shared coordination or team documentation.
+
+---
+
 # 6. Context placement test
 
 For every piece of information, ask:
@@ -700,10 +702,11 @@ For every piece of information, ask:
 | Question | Preferred placement |
 |---|---|
 | Does an agent need this during almost every meaningful task? | Root persistent instructions such as `AGENTS.md` |
-| Does it apply only to a package, service, path, or subsystem? | Scoped or nested tool-native instructions |
+| Does it apply only to a package, service, path, or subsystem? | Scoped tool-native rules, preferably loaded conditionally when matching paths are touched |
 | Is it a reusable multi-step procedure with demonstrated recurring value? | Skill or runbook |
 | Is it durable project knowledge that should be retrieved when relevant? | Ordinary domain-appropriate `docs/` |
 | Is it specific to the current task? | Task, issue, or prompt |
+| Is it a lesson the agent learned while working? | Agent-authored memory where enabled; promote it into canonical instructions or docs once durable, then delete the note |
 | Can a capable agent reliably infer it from the repository? | Usually do not document it |
 | Can it be enforced mechanically? | Prefer code, tests, types, schemas, permissions, hooks, linting, CI, or other deterministic controls |
 | Does this work benefit materially from isolated or parallel reasoning? | Delegate to a sub-agent or separate execution branch |
@@ -865,7 +868,7 @@ Do not create a permanent team of specialist agents before recurring needs demon
 
 # 11. Instruction, artifact, and orchestration ablation
 
-Ablation happens twice: **before creation** and **after the resulting setup exists**.
+Ablation happens three times: **before creation**, **after the resulting setup exists**, and **again when the underlying models materially improve**.
 
 ## Pre-creation ablation
 
@@ -913,6 +916,25 @@ If the answer is no, simplify the topology.
 
 For every persisted orchestration definition, also ask whether the same orchestration has actually recurred. If it has not, keep the work task-scoped instead.
 
+## Model-upgrade ablation
+
+Persistent instructions encode two different things: durable repository truth, and compensation for the weaknesses of the model generation in use when they were written. The first kind ages well. The second expires.
+
+When the models powering repository work materially improve, re-run final ablation across persistent instructions, skills, playbooks, agent definitions, and orchestration with that distinction in mind.
+
+Look specifically for compensatory patterns:
+
+- aggressive emphasis such as CRITICAL or YOU MUST, and the same constraint restated several ways
+- defensive triggers such as "if in doubt, do X"
+- explicit self-verification steps such as "double-check your answer before finishing"
+- instructions to restate or echo internal reasoning
+- long enumerations of cases that one brief instruction now covers
+- step-by-step procedure where outcome-level guidance suffices
+
+Where practical, test the candidate against the current model's default behavior. If default performance is at least as good, remove the instruction. Current vendor guidance states that instructions and skills developed for prior models are often too prescriptive for newer ones and can degrade output quality.
+
+Durable content normally survives this pass: verified commands, hard boundaries, domain invariants, and non-obvious project facts are not compensation.
+
 When an agent repeatedly makes a preventable mistake:
 
 1. identify the root cause
@@ -936,7 +958,7 @@ The recommended marker is:
 baseline:
   id: ai-engineering-bootstrap
   repository: jkrogsgaard/AI-Engineering
-  version: 8
+  version: 9
   source_commit: <exact-upstream-commit>
   last_reviewed: YYYY-MM-DD
 ```
@@ -980,12 +1002,12 @@ Migration guides are adjacent and composable.
 
 If a repository's recorded version is older than the immediately previous baseline, read every adjacent migration guide in order through the current version.
 
-For example, a repository moving from v5 directly to v8 should read:
+For example, a repository moving from v6 directly to v9 should read:
 
 ```text
-migrations/v5-to-v6.md
 migrations/v6-to-v7.md
 migrations/v7-to-v8.md
+migrations/v8-to-v9.md
 ```
 
 Reason about the combined Added, Changed, Removed, Reassess, Preserve, and Verification guidance.
@@ -996,7 +1018,7 @@ Do **not** mechanically replay each historical baseline.
 
 If an earlier migration adds an artifact that a later migration changes or removes, do not create the obsolete intermediate artifact merely to delete it again.
 
-Do not create intermediate commits simply to mark v6 and v7 on the way to v8.
+Do not create intermediate commits simply to mark v7 and v8 on the way to v9.
 
 The repository marker should move directly from the previously verified baseline to the newly verified current baseline after the complete audit succeeds.
 
@@ -1031,6 +1053,7 @@ Check for:
 - unsupported syntax
 - unnecessary verbosity
 - accidental tool lock-in
+- compensatory instructions retained without evidence they still help
 
 ## Verify commands
 
@@ -1072,6 +1095,13 @@ If the repository is shared across people, machines, or independent agent tools:
 - verify that the chosen protocol is lighter than the duplicate work or collision risk it addresses
 
 Do not manufacture task trackers, pull requests, or branch rules for a repository whose actual collaboration pattern does not justify them.
+
+## Verify agent-authored memory
+
+If the active tooling persists agent-authored memory:
+
+- verify that it is either deliberately enabled with an audit practice or disabled
+- verify that durable lessons are promoted into canonical instructions or documentation and stale notes removed, rather than accumulating indefinitely
 
 ## Perform a final ablation review
 
@@ -1150,7 +1180,9 @@ Choose actual filenames, paths, and mechanisms according to current tooling and 
 
 # 15. Final output
 
-When finished, report:
+When finished, report on the points below.
+
+Scale the report to the size of the audit. For a small repository, a few paragraphs covering the material points are enough.
 
 ## 1. Assessment
 
