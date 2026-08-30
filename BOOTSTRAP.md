@@ -114,8 +114,6 @@ Search specifically for existing mechanisms such as:
 - `.cursor/rules/`
 - skills
 - Copilot instructions
-- Cursor rules
-- Codex instructions
 - execution-plan conventions such as `PLANS.md`
 - MCP configuration
 - orchestration or delegation instructions
@@ -195,7 +193,7 @@ Describe the concrete gaps first.
 
 Only then decide whether a persistent artifact is the smallest useful intervention.
 
-For every proposed new file, instruction set, skill, runbook, agent definition, adapter, hook, or orchestration mechanism, apply the pre-creation ablation question from section 1.
+For every proposed new file, instruction set, skill, runbook, agent definition, adapter, hook, or orchestration mechanism, apply the pre-creation ablation question in section 11.
 
 Do not infer that a conceptual component in this bootstrap must exist physically in the repository.
 
@@ -256,7 +254,7 @@ Our default target is under 100 lines where practical.
 
 Treat 150+ lines as a signal to review whether content should be removed, scoped, moved to documentation, or moved into a skill.
 
-This target is grounded, not taste: current vendor guidance targets under 200 lines for an always-loaded instruction file and warns that longer files reduce adherence, and instruction-following research finds compliance degrades as concurrent rules accumulate. Aim below the vendor ceiling, not at it.
+This target is not arbitrary: current vendor guidance targets under 200 lines for an always-loaded instruction file and warns that longer files reduce adherence, and instruction-following research finds compliance degrades as concurrent rules accumulate. Aim below the vendor ceiling, not at it.
 
 Tool-specific documented limits or recommendations take precedence.
 
@@ -449,7 +447,7 @@ When justified, the playbook is deeper reference material and does not need to b
 
 The playbook should contain reusable engineering methodology rather than repository facts.
 
-If a playbook is justified, seed it only with methodology this repository has demonstrably needed, phrased as brief outcome-level guidance rather than step-by-step procedure.
+Seed it only with methodology this repository has demonstrably needed, phrased as brief outcome-level guidance rather than step-by-step procedure.
 
 Do not import a generic list of software-engineering principles. Capable current models follow them by default, and over-prescriptive instruction can degrade their output.
 
@@ -959,8 +957,8 @@ baseline:
   id: ai-engineering-bootstrap
   repository: jkrogsgaard/AI-Engineering
   version: 9
-  source_commit: <exact-upstream-commit>
-  last_reviewed: YYYY-MM-DD
+  source_commit: "<exact-upstream-commit>"
+  last_reviewed: "YYYY-MM-DD"
 ```
 
 `version` is the human-readable baseline release.

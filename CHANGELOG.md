@@ -23,7 +23,7 @@ This changelog records material changes to the AI Engineering Bootstrap baseline
 ### Removed
 
 - The sixteen-principle seed list for `AI_ENGINEERING_PLAYBOOK.md`. Generic engineering methodology is default behavior for current capable models, and vendor guidance warns that over-prescriptive instruction can degrade output. The playbook section itself remains for repositories with demonstrated recurring need. Existing playbooks are re-ablated during upgrade, not mechanically deleted.
-- Five of nine generic-statement examples in section 5.2 and four redundant entries in the section 2 mechanism search list. No semantic change.
+- Five of nine generic-statement examples in section 5.2 and six redundant entries in the section 2 mechanism search list. No semantic change.
 
 ### Maintenance review
 
@@ -34,6 +34,7 @@ This changelog records material changes to the AI Engineering Bootstrap baseline
 - Deferred candidate: packaging the upgrade audit as a distributable Agent Skills procedure (`SKILL.md` adapter). Deferred so the v9 text stabilizes first; it failed pre-creation ablation only on timing, not on value.
 - Subtractive review recorded: the playbook seed list and redundant examples were removed; the additions are the model-upgrade ablation, the memory policy, and the skills bar. No deletion quota was applied. The bootstrap grew by a small net amount, explained by the two new policy areas; the removals are semantic, not cosmetic.
 - Confirmed the `@AGENTS.md` compatibility example and the Agent Skills `SKILL.md` recommendation against current documentation; the adapter pattern is now vendor-documented verbatim.
+- Pre-merge self-audit pass: fixed a stale v8 internal reference that pointed the pre-creation ablation question to section 1 instead of section 11, and aligned the provenance-marker example with the quoting used in `templates/.ai-engineering.yml`.
 
 ### Philosophy
 
