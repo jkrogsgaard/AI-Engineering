@@ -15,6 +15,7 @@ Do not turn this repository into a project-specific instruction set or a catalog
 - `CHANGELOG.md` records material baseline changes.
 - `migrations/` explains semantic upgrades between versions.
 - `templates/` contains small adoption templates, not generated copies of project instructions.
+- `skills/` contains distributable agent procedures that are thin adapters over the bootstrap, not baseline content. Changing them does not require a baseline release, and they must not duplicate bootstrap guidance.
 - `MAINTENANCE.md` is the source-repository radar, self-audit, and subtractive-release runbook.
 
 ## Release invariant

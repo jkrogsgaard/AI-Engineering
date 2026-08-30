@@ -38,6 +38,7 @@ Current version: **v9**.
 - `AGENTS.md` contains maintenance rules for this repository itself.
 - `MAINTENANCE.md` contains the source-repository radar, self-audit, and subtractive-release procedure.
 - `scripts/verify-release.sh` verifies the release invariant and maintenance gate locally and in CI.
+- `skills/ai-engineering-upgrade/` is a distributable Agent Skills adapter that runs the bootstrap and upgrade audit in a target repository. It is tooling, not baseline content.
 
 ## How projects consume the baseline
 
@@ -55,6 +56,16 @@ Instead, each participating repository should record the baseline version and ex
 8. update the repository's baseline marker only after the review succeeds
 
 The baseline version is therefore a **review provenance marker**, not a guarantee that every repository contains identical files.
+
+### Running the audit as a skill
+
+`skills/ai-engineering-upgrade/` packages the bootstrap and upgrade audit as an Agent Skills-compatible procedure. Install it once at user level so it is available in every repository, for example:
+
+```sh
+ln -s /path/to/AI-Engineering/skills/ai-engineering-upgrade ~/.claude/skills/ai-engineering-upgrade
+```
+
+or copy the directory into a repository's `.claude/skills/` (or `.agents/skills/` for tools that read that location). Then invoke `/ai-engineering-upgrade`, or ask the agent to upgrade the repository against this baseline. The skill fetches this repository at an exact commit and follows the canonical `BOOTSTRAP.md`; it duplicates no baseline content, so it does not change when a new baseline is released.
 
 ### Skipped versions
 

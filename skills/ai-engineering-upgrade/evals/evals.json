@@ -1,0 +1,36 @@
+{
+  "skill_name": "ai-engineering-upgrade",
+  "evals": [
+    {
+      "id": 0,
+      "name": "upgrade-v8-compensatory",
+      "prompt": "Set up or upgrade this repository using the latest AI Engineering Bootstrap:\n\nhttps://github.com/jkrogsgaard/AI-Engineering",
+      "expected_output": "A v8 repository with compensatory instructions is audited to the current baseline: the provenance marker records the fetched VERSION, the exact upstream commit, and today's date; hard boundaries, domain invariants, and verified commands survive; compensatory emphasis (CRITICAL/double-check/if-in-doubt) is removed or justified; the generic playbook seed list is removed or gutted.",
+      "files": ["synthetic repo: small Python CLI with .ai-engineering.yml at version 8, AGENTS.md mixing durable truth with compensatory patterns, AI_ENGINEERING_PLAYBOOK.md with the old generic seed list"],
+      "assertions": [
+        "Marker records the current upstream version",
+        "Marker source_commit is the real upstream HEAD SHA (full 40 hex, never a branch name)",
+        "Marker last_reviewed is the audit date",
+        "Hard boundary preserved (generated/ rule)",
+        "Domain invariant preserved (integer oere)",
+        "Verified commands preserved (make test)",
+        "Compensatory emphasis removed from AGENTS.md",
+        "Generic playbook seed removed or gutted"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "fresh-bootstrap-minimal",
+      "prompt": "Set up or upgrade this repository using the latest AI Engineering Bootstrap:\n\nhttps://github.com/jkrogsgaard/AI-Engineering",
+      "expected_output": "A tiny repository with no AI setup gets a first bootstrap: a provenance marker with the fetched VERSION, exact upstream commit, and today's date; at most a lean root instruction file; no manufactured infrastructure (no playbook, docs hierarchy, skills, agents, or AI-context files).",
+      "files": ["synthetic repo: single small Python script plus README, no AI files, no marker"],
+      "assertions": [
+        "Marker created with the current upstream version",
+        "Marker source_commit is the real upstream HEAD SHA (full 40 hex, never a branch name)",
+        "Marker last_reviewed is the audit date",
+        "No manufactured infrastructure (no playbook, AI-context file, docs/, .claude/skills/, .claude/agents/)",
+        "Root instruction file lean (<=100 lines) or absent"
+      ]
+    }
+  ]
+}
