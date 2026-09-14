@@ -65,4 +65,19 @@ for reference in $references; do
   test -f "migrations/${reference}.md"
 done
 
+for skill in skills/*/; do
+  skill_name=$(basename "$skill")
+  skill_file="${skill}SKILL.md"
+  test -f "$skill_file"
+  test "$(sed -n '1p' "$skill_file")" = '---'
+  grep -Fqx "name: ${skill_name}" "$skill_file"
+  grep -Eq '^description: ' "$skill_file"
+  for target in $(grep -oE '\]\([^)#]+\)' "$skill_file" | sed 's/^](//; s/)$//' | grep -Ev '^[a-z]+://'); do
+    test -e "${skill}${target}"
+  done
+  if [ -f "${skill}evals/evals.json" ]; then
+    python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); sys.exit(0 if d.get("skill_name")==sys.argv[2] else 1)' "${skill}evals/evals.json" "$skill_name"
+  fi
+done
+
 printf 'Baseline v%s release verification passed\n' "$version"
