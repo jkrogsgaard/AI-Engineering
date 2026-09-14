@@ -2,6 +2,38 @@
 
 This changelog records material changes to the AI Engineering Bootstrap baseline.
 
+## v10 - 2026-09-14
+
+### Added
+
+- Skill evaluations are judged on what the agent did (files read, commands run, artifact produced), not on what it reported, and the evaluated run is kept blind where practical so the task reads like an ordinary request rather than a test.
+- Work that runs unattended and is reviewed afterwards states its completion condition as a pass-or-fail check before starting, never relaxes it to declare the work done, and leaves a task-scoped trail of decisions with evidence pointers, committed only when a reviewer needs it to trust the result.
+
+### Changed
+
+- Skipped-version examples updated to the current migration chain.
+
+### Removed
+
+- Nothing. The subtractive review found no duplicated lines, no stale internal section references, and no obsolete tool assumption to retire. The two additions total five sentences and are phrased as outcome-level guidance so model-upgrade ablation can remove them again if default behavior catches up.
+
+### Maintenance review
+
+- Completed 2026-09-14 against this repository as both baseline source and audit subject.
+- Trigger: a link-triggered radar triage of the `pstack` plugin in `cursor/plugins` (commit `be432a9`, 14 September 2026, version 0.15.2), a discovery-tier practitioner source per `MAINTENANCE.md`. The full radar scan of 2026-08-30 is 15 days old and within the 45-day gate.
+- Triage result: five candidates. Adopted two (behavior-judged blind skill evaluation; completion check and evidence trail for unattended work) as outcome-level guidance. Adopted one as source-repository tooling only (skill frontmatter and reference validation in `scripts/verify-release.sh`), which is not baseline content. Deferred one for experiment: a project-local verification skill that drives the real application with a per-feature map, to be tried in an application repository before any baseline mention. Marked one as monitor: model diversity as an independence mechanism for review, which has no evidence beyond the source's own assertion and is tool-dependent.
+- Rejected the source's shape: an always-loaded index of 23 principle skills, a requirement to name each applied principle in the reply, and verbatim playbook steps copied into a task list are the compensatory patterns v9's model-upgrade ablation removes, and the plugin is bound to one editor's mechanisms.
+- Tool-specific guidance: v10 adds none and changes none. The primary-source verification recorded for v9 on 2026-08-30 stands unchanged.
+- Source self-audit: scanned `BOOTSTRAP.md` for duplicated lines, stale internal section references, and stale version references. Found none beyond the skipped-version examples, which were updated. No ordinary target-repository adoption step was applied to this repository.
+- Subtractive review recorded above. No deletion quota was applied. The bootstrap grew by five sentences, both additions tightening existing rules rather than adding sections.
+- Evidence tier for both adoptions is discovery only. The mechanisms are stated so a repository can test them against current default behavior and remove them if they do not change outcomes.
+
+### Philosophy
+
+v10 tightens two existing rules and adds no new artifact, section, or vocabulary.
+
+An evaluation is only as good as what it observes, and an unattended run is only as trustworthy as the check it was given up front. Both additions follow the baseline's existing preference for evidence over self-report and for deterministic gates over prose.
+
 ## v9 - 2026-08-30
 
 ### Added

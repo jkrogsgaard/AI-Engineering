@@ -26,7 +26,7 @@ Use the same prompt for new and existing repositories. The bootstrap adapts the 
 
 See `VERSION` for the current baseline version and `BOOTSTRAP.md` for the canonical bootstrap prompt.
 
-Current version: **v9**.
+Current version: **v10**.
 
 ## Repository model
 
@@ -37,7 +37,7 @@ Current version: **v9**.
 - `templates/.ai-engineering.yml` is the recommended project-side provenance marker.
 - `AGENTS.md` contains maintenance rules for this repository itself.
 - `MAINTENANCE.md` contains the source-repository radar, self-audit, and subtractive-release procedure.
-- `scripts/verify-release.sh` verifies the release invariant and maintenance gate locally and in CI.
+- `scripts/verify-release.sh` verifies the release invariant, the maintenance gate, and the distributable skill metadata locally and in CI.
 - `skills/ai-engineering-upgrade/` is a distributable Agent Skills adapter that runs the bootstrap and upgrade audit in a target repository. It is tooling, not baseline content.
 
 ## How projects consume the baseline
@@ -71,7 +71,7 @@ or copy the directory into a repository's `.claude/skills/` (or `.agents/skills/
 
 Migration guides are adjacent and composable.
 
-A repository moving from v6 directly to v9 should read `v6-to-v7`, `v7-to-v8`, and `v8-to-v9` in order, then perform one focused audit of the net target state.
+A repository moving from v7 directly to v10 should read `v7-to-v8`, `v8-to-v9`, and `v9-to-v10` in order, then perform one focused audit of the net target state.
 
 Do not mechanically recreate obsolete intermediate states. If an earlier migration adds something that a later migration changes or removes, reason about the final current state and make only the changes that still matter.
 
@@ -96,7 +96,7 @@ A new baseline version should update, at minimum:
 1. `BOOTSTRAP.md`
 2. `VERSION`
 3. `CHANGELOG.md`
-4. the relevant adjacent migration guide, for example `migrations/v8-to-v9.md`
+4. the relevant adjacent migration guide, for example `migrations/v9-to-v10.md`
 5. `templates/.ai-engineering.yml`
 
 Do not advance the version unless the baseline, migration guidance, changelog, and provenance template describe the same release.

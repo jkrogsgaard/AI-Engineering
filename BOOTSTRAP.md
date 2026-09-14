@@ -1,6 +1,6 @@
 # AI Engineering Bootstrap
 
-**Baseline version: v9**
+**Baseline version: v10**
 
 ## Target repository
 
@@ -10,7 +10,7 @@ This AI-Engineering repository is the baseline source, not the target repository
 
 If the target repository already records an older AI Engineering baseline, treat this as an upgrade audit.
 
-Before changing anything, read the adjacent migration guides from the recorded version through v9. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
+Before changing anything, read the adjacent migration guides from the recorded version through v10. If several versions were skipped, compose their guidance into the desired current target state. Do not mechanically replay obsolete intermediate states.
 
 ## Set up this repository for effective AI-assisted engineering
 
@@ -539,6 +539,8 @@ Apply pre-creation ablation before adding a skill or runbook merely because the 
 
 Before persisting a skill, evaluate it: run a representative task without the skill first, and keep the skill only when it demonstrably outperforms the agent's default behavior. Current skill-authoring guidance is to create evaluations before writing extensive documentation.
 
+Judge that evaluation on what the agent did, not on what it reported: the files it read, the commands it ran, and the artifact it produced. Where practical, keep the evaluated run blind. The task should read like an ordinary request and not reveal that a skill is under test, because an agent that knows it is being evaluated behaves differently.
+
 Keep the skill roster small and each description precise. Agents select skills by description, and selection is the common failure point, so spend effort on the trigger rather than the body.
 
 Keep bundled reference material one level deep from the entry file, and reserve prescriptive step-by-step detail for fragile operations where exact sequence matters.
@@ -641,6 +643,8 @@ Prefer native orchestration mechanisms provided by the active tooling over repos
 For long-running or multi-stage work, use task-scoped execution plans when the active tooling provides a useful native mechanism and the plan materially improves resumability, dependency management, or verification.
 
 Do not require an execution plan for trivial work.
+
+For work that runs unattended and is reviewed afterwards, state the completion condition as a check that can pass or fail before the work starts, and do not relax it to declare the work done. Leave a trail of the decisions taken, each pointing at its evidence, such as a commit, a file location, or a test result, so the reviewer audits the outcome instead of reconstructing it. The trail is task-scoped working state. Commit it only when a reviewer needs it to trust the result.
 
 ---
 
@@ -956,7 +960,7 @@ The recommended marker is:
 baseline:
   id: ai-engineering-bootstrap
   repository: jkrogsgaard/AI-Engineering
-  version: 9
+  version: 10
   source_commit: "<exact-upstream-commit>"
   last_reviewed: "YYYY-MM-DD"
 ```
@@ -1000,12 +1004,12 @@ Migration guides are adjacent and composable.
 
 If a repository's recorded version is older than the immediately previous baseline, read every adjacent migration guide in order through the current version.
 
-For example, a repository moving from v6 directly to v9 should read:
+For example, a repository moving from v7 directly to v10 should read:
 
 ```text
-migrations/v6-to-v7.md
 migrations/v7-to-v8.md
 migrations/v8-to-v9.md
+migrations/v9-to-v10.md
 ```
 
 Reason about the combined Added, Changed, Removed, Reassess, Preserve, and Verification guidance.
@@ -1016,7 +1020,7 @@ Do **not** mechanically replay each historical baseline.
 
 If an earlier migration adds an artifact that a later migration changes or removes, do not create the obsolete intermediate artifact merely to delete it again.
 
-Do not create intermediate commits simply to mark v7 and v8 on the way to v9.
+Do not create intermediate commits simply to mark v8 and v9 on the way to v10.
 
 The repository marker should move directly from the previously verified baseline to the newly verified current baseline after the complete audit succeeds.
 
